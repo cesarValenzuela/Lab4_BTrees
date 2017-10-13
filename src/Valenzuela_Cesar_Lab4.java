@@ -187,4 +187,72 @@ public class Valenzuela_Cesar_Lab4 {
             // root.printNodes();
         }
     }
+
+    public void printAsc(BTreeNode x){
+
+    }
+
+    public void printDesc(BTreeNode x, int d){
+
+    }
+
+    public Boolean isKeyPresent(BTreeNode x, int k){
+        return null;
+    }
+
+    public int minElement(BTreeNode x){
+        return -1;
+    }
+
+    public int minElementDepth(BTreeNode x, int d){
+        return -1;
+    }
+
+    public int maxElement(BTreeNode x){
+        return -1;
+    }
+
+    public int maxElementDepth(BTreeNode x, int d){
+        return -1;
+    }
+
+    public int numNodes(BTreeNode x){
+        return -1;
+    }
+
+    public int numKeys(BTreeNode x){
+        return -1;
+    }
+
+    public int numKeysDepth(BTreeNode x, int d){
+        return -1;
+    }
+
+    public int sumAllKeys(BTreeNode x){
+        return -1;
+    }
+
+    public int sumAllKeysDepth(BTreeNode x, int d){
+        return -1;
+    }
+
+    public int numLeaves(BTreeNode x){
+        return -1;
+    }
+
+    public int numNodesDepth(BTreeNode x, int d){
+        return -1;
+    }
+
+    public int numFullNodes(BTreeNode x){
+        return -1;
+    }
+
+    public int depthOfKey(BTreeNode x, int k){
+        return -1;
+    }
+
+    public int printKeysInNode(BTreeNode x, int k){
+        return -1;
+    }
 }
