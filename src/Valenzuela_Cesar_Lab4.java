@@ -8,6 +8,6 @@
  */
 public class Valenzuela_Cesar_Lab4 {
     public static void main(String[] args) {
-
+        System.out.println("test");
     }
 }
