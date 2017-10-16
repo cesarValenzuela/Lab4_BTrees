@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Author: Cesar Valenzuela
  * Date: 10/13/2017
@@ -8,48 +10,71 @@
  */
 public class Valenzuela_Cesar_Lab4 {
     public static void main(String[] args) {
-        System.out.println("test");
+        int [] S ={6, 3, 16, 11, 7, 17, 14, 8, 5, 19, 15, 1, 2, 4, 18, 13, 9, 20, 10, 12, 21};
+
+        BTree B = new BTree(3);
+        for (int i=0;i<S.length;i++){
+            B.insert(S[i]);
+//            B.printNodes();
+//            System.out.println(" "/*"*********************"*/);
+        }
+        BTreeNode T = B.root;
+        printAsc(T);
+        System.out.println("");
+        System.out.println(sumAllKeysDepth(T,2));
+
+        //Build B-tree with random elements
+        Random rn = new Random();
+        BTree R = new BTree(4);
+        for (int i=0;i<30;i++){
+            R.insert(rn.nextInt(100));
+//            R.printNodes();
+//            System.out.println(" "/*"*********************"*/);
+        }
+        T = R.root;
+        printAsc(T);
+
     }
-    public class BTreeNode{
+
+    public static class BTreeNode {
         public int n;          // Actual number of keys on the node
         public boolean isLeaf; // Boolean indicator
         public int[] key;      // Keys stored in the node. They are sorted ion ascending order
         public BTreeNode[] c;  // Children of node. Keys in c[i] are less than key[i] (if it exists)
-        // and greater than key[i-1] if it exists
+                               // and greater than key[i-1] if it exists
 
-        public  BTreeNode(int t){  // Build empty node
+        public BTreeNode(int t) {  // Build empty node
             isLeaf = true;
-            key = new int[2*t-1];   // Array sizes are set to maximum possible size
-            c = new BTreeNode[2*t];
-            n=0;	                  // Number of elements is zero, since node is empty
+            key = new int[2 * t - 1];   // Array sizes are set to maximum possible size
+            c = new BTreeNode[2 * t];
+            n = 0;                      // Number of elements is zero, since node is empty
         }
 
-        public boolean isFull(){
-            return n==key.length;
+        public boolean isFull() {
+            return n == key.length;
         }
 
-        public void insert(int newKey){
+        public void insert(int newKey) {
             // Instert new key to current node
             // We make sure that the current node is not full by checking and
             // splitting if necessary before descending to node
 
             //System.out.println("inserting " + newKey); // Debugging code
-            int t = c.length/2;
-            int i=n-1;
-            if (isLeaf){
-                while ((i>=0)&& (newKey<key[i])) { // Shift key greater than newKey to left
-                    key[i+1] = key[i];
+            int t = c.length / 2;
+            int i = n - 1;
+            if (isLeaf) {
+                while ((i >= 0) && (newKey < key[i])) { // Shift key greater than newKey to left
+                    key[i + 1] = key[i];
                     i--;
                 }
                 n++;                    // Update number of keys in node
-                key[i+1]=newKey;        // Insert new key
-            }
-            else{
-                while ((i>=0)&& (newKey<key[i])) {
+                key[i + 1] = newKey;        // Insert new key
+            } else {
+                while ((i >= 0) && (newKey < key[i])) {
                     i--;
                 }
-                int insertChild = i+1;  // Subtree where new key must be inserted
-                if (c[insertChild].isFull()){
+                int insertChild = i + 1;  // Subtree where new key must be inserted
+                if (c[insertChild].isFull()) {
                     // The root of the subtree where new key will be inserted has to be split
                     // We promote the median of that root to the current node and
                     // update keys and references accordingly
@@ -59,100 +84,99 @@ public class Valenzuela_Cesar_Lab4 {
                     // c[insertChild].printNodes();
                     // System.out.println("going to promote " + c[insertChild].key[T-1]);
                     n++;
-                    c[n]=c[n-1];
-                    for(int j = n-1;j>insertChild;j--){
-                        c[j] =c[j-1];
-                        key[j] = key[j-1];
+                    c[n] = c[n - 1];
+                    for (int j = n - 1; j > insertChild; j--) {
+                        c[j] = c[j - 1];
+                        key[j] = key[j - 1];
                     }
-                    key[insertChild]= c[insertChild].key[t-1];
-                    c[insertChild].n = t-1;
+                    key[insertChild] = c[insertChild].key[t - 1];
+                    c[insertChild].n = t - 1;
 
                     BTreeNode newNode = new BTreeNode(t);
-                    for(int k=0;k<t-1;k++){
-                        newNode.c[k] = c[insertChild].c[k+t];
-                        newNode.key[k] = c[insertChild].key[k+t];
+                    for (int k = 0; k < t - 1; k++) {
+                        newNode.c[k] = c[insertChild].c[k + t];
+                        newNode.key[k] = c[insertChild].key[k + t];
                     }
 
-                    newNode.c[t-1] = c[insertChild].c[2*t-1];
-                    newNode.n=t-1;
+                    newNode.c[t - 1] = c[insertChild].c[2 * t - 1];
+                    newNode.n = t - 1;
                     newNode.isLeaf = c[insertChild].isLeaf;
-                    c[insertChild+1]=newNode;
+                    c[insertChild + 1] = newNode;
 
-                    if (newKey <key[insertChild]){
-                        c[insertChild].insert(newKey);					}
-                    else{
-                        c[insertChild+1].insert(newKey);				}
-                }
-                else
+                    if (newKey < key[insertChild]) {
+                        c[insertChild].insert(newKey);
+                    } else {
+                        c[insertChild + 1].insert(newKey);
+                    }
+                } else
                     c[insertChild].insert(newKey);  //No need to split node
             }
         }
 
-        public void print(){
+        public void print() {
             //Prints all keys in the tree in ascending order
-            if (isLeaf){
-                for(int i =0; i<n;i++)
-                    System.out.print(key[i]+" ");
+            if (isLeaf) {
+                for (int i = 0; i < n; i++)
+                    System.out.print(key[i] + " ");
                 //System.out.println();
-            }
-            else{
-                for(int i =0; i<n;i++){
+            } else {
+                for (int i = 0; i < n; i++) {
                     c[i].print();
-                    System.out.print(key[i]+" ");
+                    System.out.print(key[i] + " ");
                 }
                 c[n].print();
             }
         }
 
-        public void printNodes(){
+        public void printNodes() {
             //Prints all keys in the tree, node by node, using preorder
             //It also prints the indicator of whether a node is a leaf
             //Used mostly for debugging purposes
-            for(int i =0; i<n;i++)
-                System.out.print(key[i]+" ");
+            for (int i = 0; i < n; i++)
+                System.out.print(key[i] + " ");
             System.out.println(isLeaf);
-            if (!isLeaf){
-                for(int i =0; i<=n;i++){
+            if (!isLeaf) {
+                for (int i = 0; i <= n; i++) {
                     c[i].printNodes();
                 }
             }
         }
     }
 
-    public class BTree{
+    public static class BTree {
         public BTreeNode root;
         private int t; //2t is the maximum number of childen a node can have
         private int height;
 
-        public BTree(int t){
+        public BTree(int t) {
             root = new BTreeNode(t);
             this.t = t;
             height = 0;
         }
 
-        public void printHeight(){
-            System.out.println("Tree height is "+height);
+        public void printHeight() {
+            System.out.println("Tree height is " + height);
         }
 
-        public void insert(int newKey){
-            if (root.isFull()){//Split root;
+        public void insert(int newKey) {
+            if (root.isFull()) {//Split root;
                 split();
                 height++;
             }
             root.insert(newKey);
         }
 
-        public void print(){
+        public void print() {
             // Wrapper for node print method
             root.print();
         }
 
-        public void printNodes(){
+        public void printNodes() {
             // Wrapper for node print method
             root.printNodes();
         }
 
-        public void split(){
+        public void split() {
             // Splits the root into three nodes.
             // The median element becomes the only element in the root
             // The left subtree contains the elements that are less than the median
@@ -165,94 +189,117 @@ public class Valenzuela_Cesar_Lab4 {
             BTreeNode rightChild = new BTreeNode(t);
             leftChild.isLeaf = root.isLeaf;
             rightChild.isLeaf = root.isLeaf;
-            leftChild.n = t-1;
-            rightChild.n = t-1;
-            int median = t-1;
-            for (int i = 0;i<t-1;i++){
+            leftChild.n = t - 1;
+            rightChild.n = t - 1;
+            int median = t - 1;
+            for (int i = 0; i < t - 1; i++) {
                 leftChild.c[i] = root.c[i];
                 leftChild.key[i] = root.key[i];
             }
-            leftChild.c[median]= root.c[median];
-            for (int i = median+1;i<root.n;i++){
-                rightChild.c[i-median-1] = root.c[i];
-                rightChild.key[i-median-1] = root.key[i];
+            leftChild.c[median] = root.c[median];
+            for (int i = median + 1; i < root.n; i++) {
+                rightChild.c[i - median - 1] = root.c[i];
+                rightChild.key[i - median - 1] = root.key[i];
             }
-            rightChild.c[median]=root.c[root.n];
-            root.key[0]=root.key[median];
+            rightChild.c[median] = root.c[root.n];
+            root.key[0] = root.key[median];
             root.n = 1;
-            root.c[0]=leftChild;
-            root.c[1]=rightChild;
+            root.c[0] = leftChild;
+            root.c[1] = rightChild;
             root.isLeaf = false;
             // System.out.println("After splitting root");
             // root.printNodes();
         }
     }
 
-    public void printAsc(BTreeNode x){
+    public static void printAsc(BTreeNode x) {
+        if(x.isLeaf){
+            for (int i = 0; i < x.n ; i++) {
+                System.out.print(x.key[i] + " ");
+            }
+        }
+        else{
+            for (int i = 0; i < x.n ; i++) {
+                printAsc(x.c[i]);
+                System.out.print(x.key[i] + " ");
+            }
+            printAsc(x.c[x.n]);
+        }
+    }
+
+    public void printDesc(BTreeNode x, int d) {
 
     }
 
-    public void printDesc(BTreeNode x, int d){
-
-    }
-
-    public Boolean isKeyPresent(BTreeNode x, int k){
+    public Boolean isKeyPresent(BTreeNode x, int k) {
         return null;
     }
 
-    public int minElement(BTreeNode x){
+    public int minElement(BTreeNode x) {
         return -1;
     }
 
-    public int minElementDepth(BTreeNode x, int d){
+    public int minElementDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int maxElement(BTreeNode x){
+    public int maxElement(BTreeNode x) {
         return -1;
     }
 
-    public int maxElementDepth(BTreeNode x, int d){
+    public int maxElementDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int numNodes(BTreeNode x){
+    public int numNodes(BTreeNode x) {
         return -1;
     }
 
-    public int numKeys(BTreeNode x){
+    public int numKeys(BTreeNode x) {
         return -1;
     }
 
-    public int numKeysDepth(BTreeNode x, int d){
+    public int numKeysDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int sumAllKeys(BTreeNode x){
+    public int sumAllKeys(BTreeNode x) {
         return -1;
     }
 
-    public int sumAllKeysDepth(BTreeNode x, int d){
+    public static int sumAllKeysDepth(BTreeNode x, int d) {
+        if(x == null || d <= 0){
+            return 0;
+        }
+        int sum = 0;
+        for (int i = 0; i < x.n ; i++) {
+            sum += x.key[i];
+        }
+        if(!x.isLeaf){
+            for (int i = 0; i <= x.n ; i++) {
+                sum += sumAllKeysDepth(x.c[i],d-1);
+            }
+        }
+        return sum;
+    }
+
+    public int numLeaves(BTreeNode x) {
         return -1;
     }
 
-    public int numLeaves(BTreeNode x){
+    public int numNodesDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int numNodesDepth(BTreeNode x, int d){
+    public int numFullNodes(BTreeNode x) {
         return -1;
     }
 
-    public int numFullNodes(BTreeNode x){
+    public int depthOfKey(BTreeNode x, int k) {
         return -1;
     }
 
-    public int depthOfKey(BTreeNode x, int k){
-        return -1;
-    }
-
-    public int printKeysInNode(BTreeNode x, int k){
+    public int printKeysInNode(BTreeNode x, int k) {
         return -1;
     }
 }
