@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Valenzuela_Cesar_Lab4 {
     public static void main(String[] args) {
-        int [] S ={6, 3, 16, 11, 7, 17, 14, 8, 5, 19, 15, 1, 2, 4, 18, 13, 9, 20, 10, 12, 21};
+        int [] S ={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 
         BTree B = new BTree(3);
         for (int i=0;i<S.length;i++){
@@ -22,6 +22,9 @@ public class Valenzuela_Cesar_Lab4 {
         printAsc(T);
         System.out.println("");
         System.out.println(sumAllKeysDepth(T,2));
+        //printDesc(T, 1);
+        B.printHeight();
+        System.out.println("");
 
         //Build B-tree with random elements
         Random rn = new Random();
@@ -39,7 +42,7 @@ public class Valenzuela_Cesar_Lab4 {
     public static class BTreeNode {
         public int n;          // Actual number of keys on the node
         public boolean isLeaf; // Boolean indicator
-        public int[] key;      // Keys stored in the node. They are sorted ion ascending order
+        public int[] key;      // Keys stored in the node. They are sorted in ascending order
         public BTreeNode[] c;  // Children of node. Keys in c[i] are less than key[i] (if it exists)
                                // and greater than key[i-1] if it exists
 
@@ -227,43 +230,60 @@ public class Valenzuela_Cesar_Lab4 {
         }
     }
 
-    public void printDesc(BTreeNode x, int d) {
-
+    public static void printDesc(BTreeNode x, int d) {
+        if(x == null || d <= 0){
+            for (int i = x.n-1; i >= 0 ; i--) {
+                System.out.print(x.key[i] + " ");
+            }
+        }
+        else{
+            for (int i = x.n-1; i >= 0 ; i--) {
+                printDesc(x.c[i],d -1);
+                System.out.print(x.key[i] + " ");
+            }
+        }
     }
 
-    public Boolean isKeyPresent(BTreeNode x, int k) {
+    public static Boolean isKeyPresent(BTreeNode x, int k) {
         return null;
     }
 
-    public int minElement(BTreeNode x) {
+    public static int minElement(BTreeNode x) {
         return -1;
     }
 
-    public int minElementDepth(BTreeNode x, int d) {
+    public static int minElementDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int maxElement(BTreeNode x) {
+    public static int maxElement(BTreeNode x) {
         return -1;
     }
 
-    public int maxElementDepth(BTreeNode x, int d) {
+    public static int maxElementDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int numNodes(BTreeNode x) {
+    public static int numNodes(BTreeNode x) {
         return -1;
     }
 
-    public int numKeys(BTreeNode x) {
+    public static int numKeys(BTreeNode x) {
+        if(x.isLeaf){
+            return x.n;
+        }
+        int sum = 0;
+        for(int i = 0; i <= x.n ; i++){
+            sum += numKeys(x.c[i]);
+        }
+        return sum + x.n;
+    }
+
+    public static int numKeysDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int numKeysDepth(BTreeNode x, int d) {
-        return -1;
-    }
-
-    public int sumAllKeys(BTreeNode x) {
+    public static int sumAllKeys(BTreeNode x) {
         return -1;
     }
 
@@ -283,23 +303,23 @@ public class Valenzuela_Cesar_Lab4 {
         return sum;
     }
 
-    public int numLeaves(BTreeNode x) {
+    public static int numLeaves(BTreeNode x) {
         return -1;
     }
 
-    public int numNodesDepth(BTreeNode x, int d) {
+    public static int numNodesDepth(BTreeNode x, int d) {
         return -1;
     }
 
-    public int numFullNodes(BTreeNode x) {
+    public static int numFullNodes(BTreeNode x) {
         return -1;
     }
 
-    public int depthOfKey(BTreeNode x, int k) {
+    public static int depthOfKey(BTreeNode x, int k) {
         return -1;
     }
 
-    public int printKeysInNode(BTreeNode x, int k) {
+    public static int printKeysInNode(BTreeNode x, int k) {
         return -1;
     }
 }
