@@ -21,6 +21,11 @@ public class Valenzuela_Cesar_Lab4 {
         System.out.println("");
         System.out.println(sumAllKeysDepth(T,2));
         System.out.println(maxElement(T));
+        System.out.println(maxElementDepth(T,1));
+        System.out.println(minElement(T));
+        System.out.println(minElementDepth(T,1));
+        System.out.println(numKeys(T));
+        System.out.println("j " + numKeysDepth(T,2));
         //printDesc(T, 1);
         B.printHeight();
         System.out.println("");
@@ -248,11 +253,17 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static int minElement(BTreeNode x) {
-        return -1;
+        if(x.isLeaf){
+            return x.key[0];
+        }
+        return minElement(x.c[0]);
     }
 
     public static int minElementDepth(BTreeNode x, int d) {
-        return -1;
+        if(x.isLeaf || d <= 0){
+            return x.key[0];
+        }
+        return minElementDepth(x.c[0], d-1);
     }
 
     public static int maxElement(BTreeNode x) {
@@ -263,7 +274,10 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static int maxElementDepth(BTreeNode x, int d) {
-        return -1;
+        if(x.isLeaf || d <= 0){
+            return x.key[x.n-1];
+        }
+        return maxElementDepth(x.c[x.n], d-1);
     }
 
     public static int numNodes(BTreeNode x) {
@@ -282,7 +296,14 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static int numKeysDepth(BTreeNode x, int d) {
-        return -1;
+        if(x.isLeaf || d <= 0){
+            return x.n;
+        }
+        int sum = 0;
+        for (int i = 0; i <= x.n ; i++) {
+            sum += numKeysDepth(x.c[i], d-1);
+        }
+        return sum + x.n;
     }
 
     public static int sumAllKeys(BTreeNode x) {
