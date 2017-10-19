@@ -1,5 +1,3 @@
-import java.util.Random;
-
 /**
  * Author: Cesar Valenzuela
  * Date: 10/13/2017
@@ -22,20 +20,21 @@ public class Valenzuela_Cesar_Lab4 {
         printAsc(T);
         System.out.println("");
         System.out.println(sumAllKeysDepth(T,2));
+        System.out.println(maxElement(T));
         //printDesc(T, 1);
         B.printHeight();
         System.out.println("");
 
         //Build B-tree with random elements
-        Random rn = new Random();
-        BTree R = new BTree(4);
-        for (int i=0;i<30;i++){
-            R.insert(rn.nextInt(100));
+//        Random rn = new Random();
+//        BTree R = new BTree(4);
+//        for (int i=0;i<30;i++){
+//            R.insert(rn.nextInt(100));
 //            R.printNodes();
 //            System.out.println(" "/*"*********************"*/);
-        }
-        T = R.root;
-        printAsc(T);
+//        }
+//        T = R.root;
+//        printAsc(T);
 
     }
 
@@ -257,7 +256,10 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static int maxElement(BTreeNode x) {
-        return -1;
+        if(x.isLeaf){
+            return x.key[x.n-1];
+        }
+        return maxElement(x.c[x.n]);
     }
 
     public static int maxElementDepth(BTreeNode x, int d) {
