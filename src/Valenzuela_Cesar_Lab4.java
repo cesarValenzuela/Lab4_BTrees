@@ -27,6 +27,8 @@ public class Valenzuela_Cesar_Lab4 {
         System.out.println(minElementDepth(T,1));
         System.out.println(numKeys(T));
         System.out.println("j " + numKeysDepth(T,2));
+        System.out.println(isKeyPresent(T,16));
+        System.out.println(depthOfKey(T,16));
         //printDesc(T, 1);
         B.printHeight();
         System.out.println("");
@@ -250,7 +252,18 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static Boolean isKeyPresent(BTreeNode x, int k) {
-        return null;
+        for (int i = 0; i < x.n ; i++) {
+            if(x.key[i] == k){
+                return true;
+            }
+            if(x.key[i] > k){
+                return isKeyPresent(x.c[i],k);
+            }
+            if(x.key[x.n-1] < k){
+                return isKeyPresent(x.c[x.n],k);
+            }
+        }
+        return false;
     }
 
     public static int minElement(BTreeNode x) {
@@ -280,7 +293,7 @@ public class Valenzuela_Cesar_Lab4 {
         }
         return maxElementDepth(x.c[x.n], d-1);
     }
-
+    //needs fix
     public static int numNodes(BTreeNode x) {
         if(x.isLeaf){
             return 1;
@@ -357,12 +370,32 @@ public class Valenzuela_Cesar_Lab4 {
     public static int numFullNodes(BTreeNode x) {
         return -1;
     }
-
+    //needs fix
     public static int depthOfKey(BTreeNode x, int k) {
-        return -1;
+        int i = 0;
+        while((i<x.n)&&(k>x.key[i])) {
+            i++;
+        }
+        if((i==x.n)||(k<x.key[i])){
+            if(x.isLeaf){
+                return -1;
+            }
+            else{
+                int d = depthOfKey(x.c[i], k);
+                if (d==1){
+                    return -1;
+                }
+                else{
+                    return d+1;
+                }
+            }
+        }
+        else{
+            return 0;
+        }
     }
 
-    public static int printKeysInNode(BTreeNode x, int k) {
-        return -1;
+    public static void printKeysInNode(BTreeNode x, int k) {
+        
     }
 }
