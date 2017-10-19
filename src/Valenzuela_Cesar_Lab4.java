@@ -17,22 +17,33 @@ public class Valenzuela_Cesar_Lab4 {
 //            System.out.println(" "/*"*********************"*/);
         }
         BTreeNode T = B.root;
+
+        System.out.println("a) Print Ascending ");
         printAsc(T);
         System.out.println("");
-        System.out.println("sum all keys: " +sumAllKeys(T));
-        System.out.println("sum all keys at depth: " + sumAllKeysDepth(T,3));
-        System.out.println("max element: " + maxElement(T));
-        System.out.println("max element at depth: " + maxElementDepth(T,1));
-        System.out.println("min element: " + minElement(T));
-        System.out.println("min element at depth: " + minElementDepth(T,1));
-        System.out.println("number of keys in tree: " + numKeys(T));
-        System.out.println("number of keys at depth: " + numKeysDepth(T,2));
-        System.out.println("is key present: " + isKeyPresent(T,16));
-        System.out.println("depth of key: " + depthOfKey(T,16));
-        System.out.println("number of nodes: " + numNodes(T));
-        //printDesc(T, 1);
+        System.out.println("b) Print Descending");
+        printDesc(T, 2);
+        System.out.println("\n");
+
+        System.out.println("c) is key present: " + isKeyPresent(T,16));
+        System.out.println("d) min element: " + minElement(T));
+        System.out.println("e) min element at depth: " + minElementDepth(T,1));
+        System.out.println("f) max element: " + maxElement(T));
+        System.out.println("g) max element at depth: " + maxElementDepth(T,1));
+        System.out.println("h) number of nodes: " + numNodes(T));
+        System.out.println("i) number of keys in tree: " + numKeys(T));
+        System.out.println("j) number of keys at depth: " + numKeysDepth(T,0));
+        System.out.println("k) sum all keys: " +sumAllKeys(T));
+        System.out.println("l) sum all keys at depth: " + sumAllKeysDepth(T,2));
+        System.out.println("m) number of leaves on tree: " + numLeaves(T));
+        System.out.println("n) number of nodes at depth: " + numNodesDepth(T,1));
+        System.out.println("o) number of nodes that are full: " + numFullNodes(T));
+        System.out.println("p) depth of key: " + depthOfKey(T,20));
+        System.out.println("q) print keys in the same node as k: ");
+        printKeysInNode(T, 20);
+
+        System.out.println("");
         B.printHeight();
-        B.printNumNodes();
         System.out.println("");
         T.printNodes();
         System.out.println("");
@@ -255,9 +266,8 @@ public class Valenzuela_Cesar_Lab4 {
             }
         }
         else{
-            for (int i = x.n-1; i >= 0 ; i--) {
+            for (int i = x.n; i >= 0 ; i--) {
                 printDesc(x.c[i],d -1);
-                System.out.print(x.key[i] + " ");
             }
         }
     }
@@ -304,13 +314,13 @@ public class Valenzuela_Cesar_Lab4 {
         }
         return maxElementDepth(x.c[x.n], d-1);
     }
-    //needs fix
+
     public static int numNodes(BTreeNode x) {
-        if(x == null){
-            return 0;
+        if(x.isLeaf){
+            return 1;
         }
         int count = 1;
-        for (int i = 0; i < x.n ; i++) {
+        for (int i = 0; i <= x.n ; i++) {
             count += numNodes(x.c[i]);
         }
         return count;
@@ -326,7 +336,7 @@ public class Valenzuela_Cesar_Lab4 {
         }
         return sum + x.n;
     }
-    //needs fix
+
     public static int numKeysDepth(BTreeNode x, int d) {
         if(x.isLeaf || d <= 0){
             return x.n;
@@ -335,7 +345,7 @@ public class Valenzuela_Cesar_Lab4 {
         for (int i = 0; i <= x.n ; i++) {
             sum += numKeysDepth(x.c[i], d-1);
         }
-        return sum + x.n;
+        return sum;
     }
 
     public static int sumAllKeys(BTreeNode x) {
@@ -355,13 +365,14 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static int sumAllKeysDepth(BTreeNode x, int d) {
-        if(x == null || d <= 0){
-            return 0;
-        }
         int sum = 0;
-        for (int i = 0; i < x.n ; i++) {
-            sum += x.key[i];
+        if(x == null || d <= 0){
+            for (int i = 0; i < x.n ; i++) {
+                sum += x.key[i];
+            }
+            return sum;
         }
+
         if(!x.isLeaf){
             for (int i = 0; i <= x.n ; i++) {
                 sum += sumAllKeysDepth(x.c[i],d-1);
@@ -371,17 +382,42 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static int numLeaves(BTreeNode x) {
-        return -1;
+        if(x.isLeaf){
+            return 1;
+        }
+        int count = 0;
+        for (int i = 0; i <= x.n ; i++) {
+            count += numLeaves(x.c[i]);
+        }
+        return count;
     }
 
     public static int numNodesDepth(BTreeNode x, int d) {
-        return -1;
+        if(x.isLeaf || d <= 0){
+            return 1;
+        }
+        int count = 0;
+        for (int i = 0; i <= x.n ; i++) {
+            count += numNodesDepth(x.c[i], d-1);
+        }
+        return count;
     }
 
     public static int numFullNodes(BTreeNode x) {
-        return -1;
+
+        if(x.isLeaf){
+            if(x.key.length == x.n){
+                return 1;
+            }
+            return 0;
+        }
+        int count = 0;
+        for (int i = 0; i <= x.n ; i++) {
+            count += numFullNodes(x.c[i]);
+        }
+        return count;
     }
-    //needs fix
+
     public static int depthOfKey(BTreeNode x, int k) {
         int i = 0;
         while((i<x.n)&&(k>x.key[i])) {
@@ -393,7 +429,7 @@ public class Valenzuela_Cesar_Lab4 {
             }
             else{
                 int d = depthOfKey(x.c[i], k);
-                if (d==1){
+                if (d == -1){
                     return -1;
                 }
                 else{
@@ -407,6 +443,19 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static void printKeysInNode(BTreeNode x, int k) {
-
+        
+//        for (int i = 0; i < x.n ; i++) {
+//            if(x.key[i] == k){
+//                for (int j = 0; j < x.n ; j++) {
+//                    System.out.print(x.key[j] + " ");
+//                }
+//            }
+//            if(x.key[i] > k){
+//                printKeysInNode(x.c[i],k);
+//            }
+//            if(x.key[x.n-1] < k){
+//                printKeysInNode(x.c[x.n],k);
+//            }
+//        }
     }
 }
