@@ -19,18 +19,22 @@ public class Valenzuela_Cesar_Lab4 {
         BTreeNode T = B.root;
         printAsc(T);
         System.out.println("");
-        System.out.println(sumAllKeys(T));
-        System.out.println(sumAllKeysDepth(T,1));
-        System.out.println(maxElement(T));
-        System.out.println(maxElementDepth(T,1));
-        System.out.println(minElement(T));
-        System.out.println(minElementDepth(T,1));
-        System.out.println(numKeys(T));
-        System.out.println("j " + numKeysDepth(T,2));
-        System.out.println(isKeyPresent(T,16));
-        System.out.println(depthOfKey(T,16));
+        System.out.println("sum all keys: " +sumAllKeys(T));
+        System.out.println("sum all keys at depth: " + sumAllKeysDepth(T,3));
+        System.out.println("max element: " + maxElement(T));
+        System.out.println("max element at depth: " + maxElementDepth(T,1));
+        System.out.println("min element: " + minElement(T));
+        System.out.println("min element at depth: " + minElementDepth(T,1));
+        System.out.println("number of keys in tree: " + numKeys(T));
+        System.out.println("number of keys at depth: " + numKeysDepth(T,2));
+        System.out.println("is key present: " + isKeyPresent(T,16));
+        System.out.println("depth of key: " + depthOfKey(T,16));
+        System.out.println("number of nodes: " + numNodes(T));
         //printDesc(T, 1);
         B.printHeight();
+        B.printNumNodes();
+        System.out.println("");
+        T.printNodes();
         System.out.println("");
 
         //Build B-tree with random elements
@@ -55,7 +59,7 @@ public class Valenzuela_Cesar_Lab4 {
 
         public BTreeNode(int t) {  // Build empty node
             isLeaf = true;
-            key = new int[2 * t - 1];   // Array sizes are set to maximum possible size
+            key = new int[(2 * t) - 1];   // Array sizes are set to maximum possible size
             c = new BTreeNode[2 * t];
             n = 0;                      // Number of elements is zero, since node is empty
         }
@@ -157,21 +161,28 @@ public class Valenzuela_Cesar_Lab4 {
         public BTreeNode root;
         private int t; //2t is the maximum number of childen a node can have
         private int height;
+        private int numNodes;
 
         public BTree(int t) {
             root = new BTreeNode(t);
             this.t = t;
             height = 0;
+            numNodes = 0;
         }
 
         public void printHeight() {
             System.out.println("Tree height is " + height);
         }
 
+        public void printNumNodes(){
+            System.out.println("Number of nodes in tree: " + numNodes);
+        }
+
         public void insert(int newKey) {
             if (root.isFull()) {//Split root;
                 split();
                 height++;
+                numNodes = numNodes + 2;
             }
             root.insert(newKey);
         }
@@ -295,14 +306,14 @@ public class Valenzuela_Cesar_Lab4 {
     }
     //needs fix
     public static int numNodes(BTreeNode x) {
-        if(x.isLeaf){
-            return 1;
+        if(x == null){
+            return 0;
         }
-        int sum = 0;
-        for (int i = 0; i <= x.n ; i++) {
-            sum += numNodes(x.c[i]);
+        int count = 1;
+        for (int i = 0; i < x.n ; i++) {
+            count += numNodes(x.c[i]);
         }
-        return sum;
+        return count;
     }
 
     public static int numKeys(BTreeNode x) {
@@ -315,7 +326,7 @@ public class Valenzuela_Cesar_Lab4 {
         }
         return sum + x.n;
     }
-
+    //needs fix
     public static int numKeysDepth(BTreeNode x, int d) {
         if(x.isLeaf || d <= 0){
             return x.n;
@@ -396,6 +407,6 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static void printKeysInNode(BTreeNode x, int k) {
-        
+
     }
 }
