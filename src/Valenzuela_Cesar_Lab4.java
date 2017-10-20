@@ -40,7 +40,15 @@ public class Valenzuela_Cesar_Lab4 {
         System.out.println("o) number of nodes that are full: " + numFullNodes(T));
         System.out.println("p) depth of key: " + depthOfKey(T,20));
         System.out.println("q) print keys in the same node as k: ");
-        printKeysInNode(T, 20);
+        printKeysInNode(T, 1);
+
+        System.out.println(" ");
+        System.out.print("number of nodes: " + T.numberNodes);
+        System.out.println(" ");
+
+        System.out.println(" ");
+        System.out.print("number of keys: " + B.numberKeys);
+        System.out.println(" ");
 
         System.out.println("");
         B.printHeight();
@@ -66,13 +74,14 @@ public class Valenzuela_Cesar_Lab4 {
         public boolean isLeaf; // Boolean indicator
         public int[] key;      // Keys stored in the node. They are sorted in ascending order
         public BTreeNode[] c;  // Children of node. Keys in c[i] are less than key[i] (if it exists)
-                               // and greater than key[i-1] if it exists
+        public static int numberNodes; // and greater than key[i-1] if it exists
 
         public BTreeNode(int t) {  // Build empty node
             isLeaf = true;
             key = new int[(2 * t) - 1];   // Array sizes are set to maximum possible size
             c = new BTreeNode[2 * t];
             n = 0;                      // Number of elements is zero, since node is empty
+            numberNodes++;
         }
 
         public boolean isFull() {
@@ -172,30 +181,26 @@ public class Valenzuela_Cesar_Lab4 {
         public BTreeNode root;
         private int t; //2t is the maximum number of childen a node can have
         private int height;
-        private int numNodes;
+        private static int numberKeys;
 
         public BTree(int t) {
             root = new BTreeNode(t);
             this.t = t;
             height = 0;
-            numNodes = 0;
         }
 
         public void printHeight() {
             System.out.println("Tree height is " + height);
         }
 
-        public void printNumNodes(){
-            System.out.println("Number of nodes in tree: " + numNodes);
-        }
-
         public void insert(int newKey) {
             if (root.isFull()) {//Split root;
                 split();
                 height++;
-                numNodes = numNodes + 2;
+
             }
             root.insert(newKey);
+            numberKeys++;
         }
 
         public void print() {
@@ -219,6 +224,7 @@ public class Valenzuela_Cesar_Lab4 {
             // root.printNodes(); // Code used for debugging
             BTreeNode leftChild = new BTreeNode(t);
             BTreeNode rightChild = new BTreeNode(t);
+
             leftChild.isLeaf = root.isLeaf;
             rightChild.isLeaf = root.isLeaf;
             leftChild.n = t - 1;
@@ -242,6 +248,10 @@ public class Valenzuela_Cesar_Lab4 {
             // System.out.println("After splitting root");
             // root.printNodes();
         }
+    }
+
+    public static Boolean binarySearch(){
+        return null;
     }
 
     public static void printAsc(BTreeNode x) {
@@ -442,20 +452,24 @@ public class Valenzuela_Cesar_Lab4 {
         }
     }
 
-    public static void printKeysInNode(BTreeNode x, int k) {
-        
-//        for (int i = 0; i < x.n ; i++) {
-//            if(x.key[i] == k){
-//                for (int j = 0; j < x.n ; j++) {
-//                    System.out.print(x.key[j] + " ");
-//                }
-//            }
-//            if(x.key[i] > k){
-//                printKeysInNode(x.c[i],k);
-//            }
-//            if(x.key[x.n-1] < k){
-//                printKeysInNode(x.c[x.n],k);
-//            }
-//        }
+    public static Boolean printKeysInNode(BTreeNode x, int k) {
+        for (int i = 0; i < x.n ; i++) {
+            if(x.key[i] == k){
+                helperPrintKeysInNode(x);
+                return true;
+            }
+            if(x.key[i] > k){
+                return printKeysInNode(x.c[i],k);
+            }
+            if(x.key[x.n-1] < k){
+                return printKeysInNode(x.c[x.n],k);
+            }
+        }
+        return false;
+    }
+    public static void helperPrintKeysInNode(BTreeNode x){
+        for (int i = 0; i < x.n ; i++) {
+            System.out.print(x.key[i] + " ");
+        }
     }
 }
