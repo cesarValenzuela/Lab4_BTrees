@@ -8,10 +8,10 @@
  */
 public class Valenzuela_Cesar_Lab4 {
     public static void main(String[] args) {
-        int [] S ={1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+        int[] S = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 
         BTree B = new BTree(3);
-        for (int i=0;i<S.length;i++){
+        for (int i = 0; i < S.length; i++) {
             B.insert(S[i]);
 //            B.printNodes();
 //            System.out.println(" "/*"*********************"*/);
@@ -25,22 +25,22 @@ public class Valenzuela_Cesar_Lab4 {
         printDesc(T, 2);
         System.out.println("\n");
 
-        System.out.println("c) is key present: " + isKeyPresent(T,16));
+        System.out.println("c) is key present 13: " + isKeyPresent(T, 13));
         System.out.println("d) min element: " + minElement(T));
-        System.out.println("e) min element at depth: " + minElementDepth(T,1));
+        System.out.println("e) min element at depth 1: " + minElementDepth(T, 1));
         System.out.println("f) max element: " + maxElement(T));
-        System.out.println("g) max element at depth: " + maxElementDepth(T,1));
+        System.out.println("g) max element at depth 1: " + maxElementDepth(T, 1));
         System.out.println("h) number of nodes: " + numNodes(T));
         System.out.println("i) number of keys in tree: " + numKeys(T));
-        System.out.println("j) number of keys at depth: " + numKeysDepth(T,0));
-        System.out.println("k) sum all keys: " +sumAllKeys(T));
-        System.out.println("l) sum all keys at depth: " + sumAllKeysDepth(T,2));
+        System.out.println("j) number of keys at depth 0: " + numKeysDepth(T, 0));
+        System.out.println("k) sum all keys: " + sumAllKeys(T));
+        System.out.println("l) sum all keys at depth 2: " + sumAllKeysDepth(T, 2));
         System.out.println("m) number of leaves on tree: " + numLeaves(T));
-        System.out.println("n) number of nodes at depth: " + numNodesDepth(T,1));
+        System.out.println("n) number of nodes at depth 1: " + numNodesDepth(T, 1));
         System.out.println("o) number of nodes that are full: " + numFullNodes(T));
-        System.out.println("p) depth of key: " + depthOfKey(T,20));
-        System.out.println("q) print keys in the same node as k: ");
-        printKeysInNode(T, 1);
+        System.out.println("p) depth of key 16: " + depthOfKey(T, 16));
+        System.out.print("q) print keys in the same node as k(16): ");
+        printKeysInNode(T, 16);
 
         System.out.println(" ");
         System.out.print("number of nodes: " + T.numberNodes);
@@ -50,9 +50,10 @@ public class Valenzuela_Cesar_Lab4 {
         System.out.print("number of keys: " + B.numberKeys);
         System.out.println(" ");
 
+
         System.out.println("");
         B.printHeight();
-        System.out.println("");
+        System.out.println("\n---------- Debugging Printout of Tree ----------");
         T.printNodes();
         System.out.println("");
 
@@ -94,6 +95,7 @@ public class Valenzuela_Cesar_Lab4 {
             // splitting if necessary before descending to node
 
             //System.out.println("inserting " + newKey); // Debugging code
+
             int t = c.length / 2;
             int i = n - 1;
             if (isLeaf) {
@@ -250,18 +252,13 @@ public class Valenzuela_Cesar_Lab4 {
         }
     }
 
-    public static Boolean binarySearch(){
-        return null;
-    }
-
     public static void printAsc(BTreeNode x) {
-        if(x.isLeaf){
-            for (int i = 0; i < x.n ; i++) {
+        if (x.isLeaf) {
+            for (int i = 0; i < x.n; i++) {
                 System.out.print(x.key[i] + " ");
             }
-        }
-        else{
-            for (int i = 0; i < x.n ; i++) {
+        } else {
+            for (int i = 0; i < x.n; i++) {
                 printAsc(x.c[i]);
                 System.out.print(x.key[i] + " ");
             }
@@ -270,104 +267,103 @@ public class Valenzuela_Cesar_Lab4 {
     }
 
     public static void printDesc(BTreeNode x, int d) {
-        if(x == null || d <= 0){
-            for (int i = x.n-1; i >= 0 ; i--) {
+        if (x == null || d <= 0) {
+            for (int i = x.n - 1; i >= 0; i--) {
                 System.out.print(x.key[i] + " ");
             }
-        }
-        else{
-            for (int i = x.n; i >= 0 ; i--) {
-                printDesc(x.c[i],d -1);
+        } else {
+            for (int i = x.n; i >= 0; i--) {
+                printDesc(x.c[i], d - 1);
             }
         }
     }
 
     public static Boolean isKeyPresent(BTreeNode x, int k) {
-        for (int i = 0; i < x.n ; i++) {
-            if(x.key[i] == k){
+        for (int i = 0; i < x.n; i++) {
+            if (x.key[i] == k) {
                 return true;
             }
-            if(x.key[i] > k){
-                return isKeyPresent(x.c[i],k);
+            if (x.key[i] > k) {
+                return isKeyPresent(x.c[i], k);
             }
-            if(x.key[x.n-1] < k){
-                return isKeyPresent(x.c[x.n],k);
+            if (x.key[x.n - 1] < k) {
+                return isKeyPresent(x.c[x.n], k);
             }
         }
         return false;
     }
 
     public static int minElement(BTreeNode x) {
-        if(x.isLeaf){
+        if (x.isLeaf) {
             return x.key[0];
         }
         return minElement(x.c[0]);
     }
 
     public static int minElementDepth(BTreeNode x, int d) {
-        if(x.isLeaf || d <= 0){
+        if (x.isLeaf || d <= 0) {
             return x.key[0];
         }
-        return minElementDepth(x.c[0], d-1);
+        return minElementDepth(x.c[0], d - 1);
     }
 
     public static int maxElement(BTreeNode x) {
-        if(x.isLeaf){
-            return x.key[x.n-1];
+        if (x.isLeaf) {
+            return x.key[x.n - 1];
         }
         return maxElement(x.c[x.n]);
     }
 
     public static int maxElementDepth(BTreeNode x, int d) {
-        if(x.isLeaf || d <= 0){
-            return x.key[x.n-1];
+        if (x.isLeaf || d <= 0) {
+            return x.key[x.n - 1];
         }
-        return maxElementDepth(x.c[x.n], d-1);
+        return maxElementDepth(x.c[x.n], d - 1);
     }
 
     public static int numNodes(BTreeNode x) {
-        if(x.isLeaf){
+        if (x.isLeaf) {
             return 1;
         }
         int count = 1;
-        for (int i = 0; i <= x.n ; i++) {
+        for (int i = 0; i <= x.n; i++) {
             count += numNodes(x.c[i]);
         }
         return count;
     }
 
     public static int numKeys(BTreeNode x) {
-        if(x.isLeaf){
+        if (x.isLeaf) {
             return x.n;
         }
         int sum = 0;
-        for(int i = 0; i <= x.n ; i++){
+        for (int i = 0; i <= x.n; i++) {
             sum += numKeys(x.c[i]);
         }
         return sum + x.n;
     }
 
     public static int numKeysDepth(BTreeNode x, int d) {
-        if(x.isLeaf || d <= 0){
+        if (x.isLeaf || d <= 0) {
             return x.n;
         }
         int sum = 0;
-        for (int i = 0; i <= x.n ; i++) {
-            sum += numKeysDepth(x.c[i], d-1);
+        for (int i = 0; i <= x.n; i++) {
+            sum += numKeysDepth(x.c[i], d - 1);
         }
         return sum;
     }
 
     public static int sumAllKeys(BTreeNode x) {
-        if(x == null){
+        if (x == null) {
             return 0;
         }
         int sum = 0;
-        for (int i = 0; i < x.n ; i++) {
+        for (int i = 0; i < x.n; i++) {
             sum += x.key[i];
         }
-        if(!x.isLeaf){
-            for (int i = 0; i <= x.n ; i++) {
+        if (!x.isLeaf) {
+            for (int i = 0; i <= x.n; i++) {
                 sum += sumAllKeys(x.c[i]);
             }
         }
@@ -376,53 +372,53 @@ public class Valenzuela_Cesar_Lab4 {
 
     public static int sumAllKeysDepth(BTreeNode x, int d) {
         int sum = 0;
-        if(x == null || d <= 0){
-            for (int i = 0; i < x.n ; i++) {
+        if (x == null || d <= 0) {
+            for (int i = 0; i < x.n; i++) {
                 sum += x.key[i];
             }
             return sum;
         }
 
-        if(!x.isLeaf){
-            for (int i = 0; i <= x.n ; i++) {
-                sum += sumAllKeysDepth(x.c[i],d-1);
+        if (!x.isLeaf) {
+            for (int i = 0; i <= x.n; i++) {
+                sum += sumAllKeysDepth(x.c[i], d - 1);
             }
         }
         return sum;
     }
 
     public static int numLeaves(BTreeNode x) {
-        if(x.isLeaf){
+        if (x.isLeaf) {
             return 1;
         }
         int count = 0;
-        for (int i = 0; i <= x.n ; i++) {
+        for (int i = 0; i <= x.n; i++) {
             count += numLeaves(x.c[i]);
         }
         return count;
     }
 
     public static int numNodesDepth(BTreeNode x, int d) {
-        if(x.isLeaf || d <= 0){
+        if (x.isLeaf || d <= 0) {
             return 1;
         }
         int count = 0;
-        for (int i = 0; i <= x.n ; i++) {
-            count += numNodesDepth(x.c[i], d-1);
+        for (int i = 0; i <= x.n; i++) {
+            count += numNodesDepth(x.c[i], d - 1);
         }
         return count;
     }
 
     public static int numFullNodes(BTreeNode x) {
 
-        if(x.isLeaf){
-            if(x.key.length == x.n){
+        if (x.isLeaf) {
+            if (x.key.length == x.n) {
                 return 1;
             }
             return 0;
         }
         int count = 0;
-        for (int i = 0; i <= x.n ; i++) {
+        for (int i = 0; i <= x.n; i++) {
             count += numFullNodes(x.c[i]);
         }
         return count;
@@ -430,45 +426,43 @@ public class Valenzuela_Cesar_Lab4 {
 
     public static int depthOfKey(BTreeNode x, int k) {
         int i = 0;
-        while((i<x.n)&&(k>x.key[i])) {
+        while ((i < x.n) && (k > x.key[i])) {
             i++;
         }
-        if((i==x.n)||(k<x.key[i])){
-            if(x.isLeaf){
+        if ((i == x.n) || (k < x.key[i])) {
+            if (x.isLeaf) {
                 return -1;
-            }
-            else{
+            } else {
                 int d = depthOfKey(x.c[i], k);
-                if (d == -1){
+                if (d == -1) {
                     return -1;
-                }
-                else{
-                    return d+1;
+                } else {
+                    return d + 1;
                 }
             }
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
     public static Boolean printKeysInNode(BTreeNode x, int k) {
-        for (int i = 0; i < x.n ; i++) {
-            if(x.key[i] == k){
+        for (int i = 0; i < x.n; i++) {
+            if (x.key[i] == k) {
                 helperPrintKeysInNode(x);
                 return true;
             }
-            if(x.key[i] > k){
-                return printKeysInNode(x.c[i],k);
+            if (x.key[i] > k) {
+                return printKeysInNode(x.c[i], k);
             }
-            if(x.key[x.n-1] < k){
-                return printKeysInNode(x.c[x.n],k);
+            if (x.key[x.n - 1] < k) {
+                return printKeysInNode(x.c[x.n], k);
             }
         }
         return false;
     }
-    public static void helperPrintKeysInNode(BTreeNode x){
-        for (int i = 0; i < x.n ; i++) {
+
+    public static void helperPrintKeysInNode(BTreeNode x) {
+        for (int i = 0; i < x.n; i++) {
             System.out.print(x.key[i] + " ");
         }
     }
